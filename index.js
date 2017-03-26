@@ -1,101 +1,46 @@
 /*
  * Copyright 2017 Sotaro Sugimoto
  * https://github.com/L3Sota/bf-interpreter
+ *
+ * index.js: main evaluation loop
+ *
+ * index.js performs all API interactions with
+ * Twitter through the Twitter npm package, and
+ * forks a process to run bf.js whenever
+ * it finds a new mention.
  */
 
-function bf_interpret(input, program) {
-  var i_position = 0;
-  var buffer = [];
-  var b_position = 0;
+const cp = require('child_process');
+
+function fork_interpreter(input, program, callback) {
   var result = '';
-  for (var tape = 0; tape < program.length; tape++) {
-    var current_command = program.charAt(tape);
-    if (buffer.length <= b_position) {
-      buffer.push(0);
+  const max_wait = 2;
+  var tle = setTimeout(() => {
+    throw new Error('Interpreter Error: TLE: '+max_wait+' s.');
+  }, max_wait*1000);
+  var interpreter = cp.fork('./bf.js', [input, program])
+  interpreter.on('message', (m) => {
+    if (m.stream == 'error') {
+      throw new Error(m.message);
     }
-    switch(current_command) {
-      case ',': { // read
-        buffer[b_position] = input.charCodeAt(i_position++);
-        if (input.length < i_position) { input += '' + 0; }
-        break;
-      }
-      case '.': { // write
-        var code = buffer[b_position];
-        if (code >= 32 && code <= 126) { // printable ASCII
-          result += String.fromCharCode(code);
-        } else {
-          result += '\\' + code;
-        }
-        break;
-      }
-      case '<': { // left
-        if (b_position > 0) { b_position--; }
-        break;
-      }
-      case '>': { // right
-        b_position++;
-        break;
-      }
-      case '[': { // loop beginning
-        var tape_orig = tape;
-        if (buffer[b_position] == 0) {
-          var depth = 0;
-          var terminate = false;
-          while(!terminate) {
-            tape++;
-            if (tape >= program.length) {
-              var err = 'Syntax error: No matching ] for [ at '+tape_orig+'.';
-              console.log(err);
-              return err + '\n' + program;
-            }
-            if (program.charAt(tape) == ']') {
-              if (depth == 0) { terminate = true; }
-              else { --depth; }
-            } else if (program[tape] == '[') {
-              ++depth;
-            }
-          }
-        }
-        break;
-      }
-      case ']': { // loop end
-        var tape_orig = tape;
-        if (buffer[b_position] != 0) {
-          var depth = 0;
-          var terminate = false;
-          while(!terminate) {
-            tape--;
-            if (tape < 0) {
-              var err = 'Syntax error: No matching [ for ] at '+tape_orig+'.';
-              console.log(err);
-              return err + '\n' + program;
-            }
-            if (program[tape] == '[') {
-              if (depth == 0) { terminate = true; }
-              else { --depth; }
-            } else if (program[tape] == ']') {
-              ++depth;
-            }
-          }
-        }
-        break;
-      }
-      case '+': { // increment
-        ++buffer[b_position];
-        break;
-      }
-      case '-': { // decrement
-        --buffer[b_position];
-        break;
-      }
-      default: {
-        break;
-      }
+    if (m.stream == 'output') {
+      result += m.message;
     }
-  }
-  console.log('Finished. Result: '+result);
-  return result;
+  });
+  interpreter.on('exit', (code, signal) => {
+    if (code === 0) {
+      clearTimeout(tle);
+      callback(result);
+    } else {
+      throw new Error('Interpreter Error: Interpreter exited with '+code+'.');
+    }
+  });
+  return;
 }
 
-bf_interpret('Hello', '++>,.>,.>,.>,.>,.<<<<<[->.<>+>+>+.<.<.<]'); // Should print: HelloHmfIIngJ
-bf_interpret('Hello', ',.+[-],.'); // Should print: He
+fork_interpreter('Hello', '++>,.>,.>,.>,.>,.<<<<<[->.<>+>+>+.<.<.<]', (result) => {
+  console.log(result);
+}); // Should print: HelloHmfIIngJ
+fork_interpreter('Hello', ',.+[-],.', (result) => {
+  console.log(result);
+}); // Should print: He
