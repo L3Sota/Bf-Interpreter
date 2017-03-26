@@ -12,6 +12,8 @@
 
 const cp = require('child_process');
 
+exports.fork_interpreter = fork_interpreter;
+
 function fork_interpreter(input, program, callback) {
   var result = '';
   const max_wait = 2;
@@ -37,10 +39,3 @@ function fork_interpreter(input, program, callback) {
   });
   return;
 }
-
-fork_interpreter('Hello', '++>,.>,.>,.>,.>,.<<<<<[->.<>+>+>+.<.<.<]', (result) => {
-  console.log(result);
-}); // Should print: HelloHmfIIngJ
-fork_interpreter('Hello', ',.+[-],.', (result) => {
-  console.log(result);
-}); // Should print: He
