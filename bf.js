@@ -8,6 +8,9 @@
  * the passed Brainfuck code.
  */
 
+// Standalone execution with console output
+process.send = process.send || console.log;
+
 function send_error(content) {
   process.send({
     stream: 'error',
