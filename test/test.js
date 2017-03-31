@@ -9,28 +9,28 @@
  */
 
 const assert = require('assert');
-const bf = require('../index.js');
+const server = require('../server.js');
 
 describe('bf_interpret', function() {
   it('Prints correctly', function(done) {
-    bf.fork_interpreter('Hello', ',.,.,.,.,.', function(result) {
+    server.fork_interpreter('Hello', ',.,.,.,.,.', function(result) {
       assert.equal('Hello', result);
       done();
     });
   });
   it('Does simple loops correctly', function(done) {
     var done_count = 0;
-    bf.fork_interpreter('Hello', '+[->++<]>[-<++>]<+[-,.]', function(result) {
+    server.fork_interpreter('Hello', '+[->++<]>[-<++>]<+[-,.]', function(result) {
       assert.equal('Hello\\0', result);
       ++done_count;
       if (done_count == 3) { done(); }
     });
-    bf.fork_interpreter('Hello', '++>,.>,.>,.>,.>,.<<<<<[->.<>+>+>+.<.<.<]', function(result) {
+    server.fork_interpreter('Hello', '++>,.>,.>,.>,.>,.<<<<<[->.<>+>+>+.<.<.<]', function(result) {
       assert.equal('HelloHmfIIngJ', result);
       ++done_count;
       if (done_count == 3) { done(); }
     });
-    bf.fork_interpreter('Hello', ',.+[-],.', function(result) {
+    server.fork_interpreter('Hello', ',.+[-],.', function(result) {
       assert.equal('He', result);
       ++done_count;
       if (done_count == 3) { done(); }

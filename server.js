@@ -2,9 +2,9 @@
  * Copyright 2017 Sotaro Sugimoto
  * https://github.com/L3Sota/bf-interpreter
  *
- * index.js: main evaluation loop
+ * server.js: main evaluation loop
  *
- * index.js performs all API interactions with
+ * server.js performs all API interactions with
  * Twitter through the Twitter npm package, and
  * forks a process to run bf.js whenever
  * it finds a new mention.
