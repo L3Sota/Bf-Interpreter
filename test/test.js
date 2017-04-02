@@ -20,20 +20,29 @@ describe('bf_interpret', function() {
   });
   it('Does simple loops correctly', function(done) {
     var done_count = 0;
+    const num_tests = 4;
+    var check = setInterval(function() {
+      if (done_count == num_tests) { clearInterval(check); done(); }
+    }, 100);
     server.fork_interpreter('Hello', '+[->++<]>[-<++>]<+[-,.]', function(result) {
       assert.equal('Hello\\0', result);
       ++done_count;
-      if (done_count == 3) { done(); }
+      if (done_count == num_tests) { clearInterval(check); done(); }
     });
     server.fork_interpreter('Hello', '++>,.>,.>,.>,.>,.<<<<<[->.<>+>+>+.<.<.<]', function(result) {
       assert.equal('HelloHmfIIngJ', result);
       ++done_count;
-      if (done_count == 3) { done(); }
+      if (done_count == num_tests) { clearInterval(check); done(); }
     });
     server.fork_interpreter('Hello', ',.+[-],.', function(result) {
       assert.equal('He', result);
       ++done_count;
-      if (done_count == 3) { done(); }
+      if (done_count == num_tests) { clearInterval(check); done(); }
     });
+    server.fork_interpreter('Hello', '[,.]', function(result) {
+      assert.equal('Hello\\0', result);
+      ++done_count;
+      if (done_count == num_tests) { clearInterval(check); done(); }
+    })
   });
 })
