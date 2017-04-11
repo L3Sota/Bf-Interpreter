@@ -25,24 +25,24 @@ describe('bf_interpret', function() {
       if (done_count == num_tests) { clearInterval(check); done(); }
     }, 100);
     server.fork_interpreter('Hello', '+[->++<]>[-<++>]<+[-,.]', function(result) {
-      assert.equal('Hello\\0', result);
+      assert.equal(result, 'Hello\\0');
       ++done_count;
       if (done_count == num_tests) { clearInterval(check); done(); }
     });
     server.fork_interpreter('Hello', '++>,.>,.>,.>,.>,.<<<<<[->.<>+>+>+.<.<.<]', function(result) {
-      assert.equal('HelloHmfIIngJ', result);
+      assert.equal(result, 'HelloHmfIIngJ');
       ++done_count;
       if (done_count == num_tests) { clearInterval(check); done(); }
     });
     server.fork_interpreter('Hello', ',.+[-],.', function(result) {
-      assert.equal('He', result);
+      assert.equal(result, 'He');
       ++done_count;
       if (done_count == num_tests) { clearInterval(check); done(); }
     });
-    server.fork_interpreter('Hello', '[,.]', function(result) {
-      assert.equal('Hello\\0', result);
+    server.fork_interpreter('Hello', '+[,.]', function(result) {
+      assert.equal(result, 'Hello\\0');
       ++done_count;
       if (done_count == num_tests) { clearInterval(check); done(); }
-    })
+    });
   });
-})
+});
