@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/L3Sota/bf-interpreter#readme",
   "dependencies": {
+    "he": "^1.1.1",
     "twitter": "^1.7.0"
   },
   "devDependencies": {
