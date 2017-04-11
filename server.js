@@ -12,29 +12,33 @@
 
 const cp = require('child_process');
 
+// expose to Mocha
 exports.fork_interpreter = fork_interpreter;
 
 function fork_interpreter(input, program, callback) {
   var result = '';
   const max_wait = 2;
   var tle = setTimeout(() => {
-    throw new Error('Interpreter Error: TLE: '+max_wait+' s.');
+    console.error('Interpreter Error: TLE: '+max_wait+' s');
   }, max_wait*1000);
   var interpreter = cp.fork('./bf.js', [input, program])
   interpreter.on('message', (m) => {
-    if (m.stream == 'error') {
-      throw new Error(m.message);
-    }
     if (m.stream == 'output') {
       result += m.message;
+    } else if (m.stream == 'error') {
+      console.error('Interpreter Error: Message received on error stream');
+      console.error(m.message);
+    } else {
+      console.error('Interpreter Error: Message received on unknown stream');
+      console.error(m);
     }
   });
   interpreter.on('exit', (code, signal) => {
+    clearTimeout(tle);
     if (code === 0) {
-      clearTimeout(tle);
       callback(result);
     } else {
-      throw new Error('Interpreter Error: Interpreter exited with '+code+'.');
+      console.error('Interpreter Error: Interpreter exited with '+code);
     }
   });
   return;
