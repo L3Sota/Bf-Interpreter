@@ -196,10 +196,10 @@ if (process.env.TWTR_USER_ID
 
 } else {
   console.error('Error: Missing environment variables');
-  console.error(process.env.TWTR_USER_ID);
-  console.error(process.env.TWTR_C_KEY);
-  console.error(process.env.TWTR_C_SECRET);
-  console.error(process.env.TWTR_ACCESS_T_KEY);
-  console.error(process.env.TWTR_ACCESS_T_SECRET);
+  console.error(`TWTR_USER_ID: ${process.env.TWTR_USER_ID}`);
+  console.error(`TWTR_C_KEY: ${process.env.TWTR_C_KEY}`);
+  console.error(`TWTR_C_SECRET: ${process.env.TWTR_C_SECRET}`);
+  console.error(`TWTR_ACCESS_T_KEY: ${process.env.TWTR_ACCESS_T_KEY}`);
+  console.error(`TWTR_ACCESS_T_SECRET: ${process.env.TWTR_ACCESS_T_SECRET}`);
   return 1;
 }
