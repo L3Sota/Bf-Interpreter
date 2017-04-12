@@ -32,6 +32,8 @@ function fork_interpreter(input, program, callback) {
     } else if (m.stream == 'error') {
       console.error('Interpreter Error: Message received on error stream');
       console.error(m.message);
+    } else if (m.stream == 'runtime') {
+      console.log(`Interpreter finished running in ${m.message} ms`);
     } else {
       console.error('Interpreter Error: Message received on unknown stream');
       console.error(m);

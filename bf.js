@@ -58,6 +58,7 @@ function find_matching(start, program) {
   return -1;
 }
 
+const startingTime = process.hrtime();
 var input;
 var program;
 var argc = process.argv.length;
@@ -145,4 +146,7 @@ for (var tape = 0; tape < program.length; ++tape) {
   }
 }
 send_output(result);
+var endingTime = process.hrtime(startingTime);
+send_general('runtime', `${endingTime[0]*1e3 + endingTime[1]/1e3}`);
+
 return 0;
