@@ -62,7 +62,7 @@ var input;
 var program;
 var argc = process.argv.length;
 if (argc < 2) {
-  send_error('Syntax error: At least 2 args required but '+argc+' provided.');
+  send_error(`Syntax error: At least 2 args required but ${argc} provided.`);
   return 1;
 } else {
   input = process.argv[argc-2];
@@ -97,7 +97,7 @@ for (var tape = 0; tape < program.length; ++tape) {
       if (code >= 32 && code <= 126) { // printable ASCII
         result += String.fromCharCode(code);
       } else {
-        result += '\\' + code;
+        result += `\\${code}`;
       }
       break;
     }
@@ -112,7 +112,7 @@ for (var tape = 0; tape < program.length; ++tape) {
     case '[': { // loop beginning
       var match = find_matching(tape, program);
       if (match == -1) {
-        send_error('Syntax error: No matching ] for [ at '+tape+'.\n' + input + '::' + program);
+        send_error(`Syntax error: No matching ] for [ at ${tape}.\n${input}::${program}`);
         return 1;
       }
       if (buffer[b_position] === 0) {
@@ -123,7 +123,7 @@ for (var tape = 0; tape < program.length; ++tape) {
     case ']': { // loop end
       var match = find_matching(tape, program);
       if (match == -1) {
-        send_error('Syntax error: No matching [ for ] at '+tape+'.\n' + input + '::' + program);
+        send_error(`Syntax error: No matching [ for ] at ${tape}.\n${input}::${program}`);
         return 1;
       }
       if (buffer[b_position] != 0) {

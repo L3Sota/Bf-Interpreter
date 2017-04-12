@@ -22,9 +22,9 @@ function fork_interpreter(input, program, callback) {
   var result = '';
   const max_wait = 2;
   var tle = setTimeout(() => {
-    console.error('Interpreter Error: TLE: '+max_wait+' s');
+    console.error(`Interpreter Error: TLE: ${max_wait} s`);
   }, max_wait*1000);
-  console.log('Forking bf.js with input: "'+input+'" and program "'+program+'"');
+  console.log(`Forking bf.js with input: "${input}" and program "${program}"`);
   var interpreter = cp.fork('./bf.js', [input, program])
   interpreter.on('message', (m) => {
     if (m.stream == 'output') {
@@ -62,7 +62,7 @@ function fetch_latest_tweet(tw_client, callback) {
       return 1;
     }
     if (Array.isArray(tweets)) {
-      console.log('Fetched '+tweets.length+' tweets from user timeline');
+      console.log(`Fetched ${tweets.length} tweets from user timeline`);
       for (var i = 0; i < tweets.length; ++i) {
         if(process.env.TWTR_USER_ID == tweets[i].user.id_str) {
           last_tweet_id_str = tweets[i].id_str;
@@ -84,7 +84,7 @@ function fetch_latest_tweet(tw_client, callback) {
 function parseTweet(text, username) {
   text = html_entities.decode(text);
   var splitting = text.split('::');
-  const mention_str = '@'+username+' ';
+  const mention_str = `@${username} `;
   if (splitting.length == 1) {
     var start = text.indexOf(mention_str);
     if (start == -1) {
@@ -125,7 +125,7 @@ function sendReply(tw_client, destination, original_tweet_id, message) {
   message = html_entities.encode(message);
   tw_client.post('statuses/update', {
     in_reply_to_status_id: original_tweet_id,
-    status: '@'+destination+' '+message
+    status: `@${destination} ${message}`
   }, (error, tweet, response) => {
     if (error) {
       console.error('Error: POST statuses/update failed');
@@ -148,7 +148,7 @@ function main(tw_client) {
           console.error('Error: GET statuses/mentions_timeline returned error');
           console.error(error);
         } else if (Array.isArray(mentions)) {
-          console.log('Sending '+mentions.length+' replies to mentions');
+          console.log(`Sending ${mentions.length} replies to mentions`);
           mentions.forEach((mention) => {
             console.log(mention);
             var sender = mention.user.screen_name;
