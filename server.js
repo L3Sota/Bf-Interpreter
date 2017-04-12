@@ -11,6 +11,7 @@
  */
 
 const html_entities = require('he');
+const http = require('http');
 const twitter = require('twitter');
 const cp = require('child_process');
 
@@ -193,6 +194,8 @@ if (process.env.TWTR_USER_ID
   });
 
   setInterval(main, 60*1000, client);
+
+  http.createServer().listen(process.env.PORT || 8103);
 
 } else {
   console.error('Error: Missing environment variables');
