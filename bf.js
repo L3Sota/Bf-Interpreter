@@ -11,17 +11,17 @@
 // Standalone execution with console output
 process.send = process.send || console.log;
 
-function send_error(content) {
+function send_general(stream, content) {
   process.send({
-    stream: 'error',
+    stream: stream,
     message: content
   });
 }
+function send_error(content) {
+  send_general('error', content);
+}
 function send_output(content) {
-  process.send({
-    stream: 'output',
-    message: content
-  })
+  send_general('output', content);
 }
 
 function find_matching(start, program) {
