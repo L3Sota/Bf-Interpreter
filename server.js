@@ -65,15 +65,16 @@ function fetch_latest_tweet(tw_client, callback) {
       return 1;
     }
     if (Array.isArray(tweets)) {
-      console.log(`Fetched ${tweets.length} tweets from user timeline`);
+      var fetch_log = `Fetched ${tweets.length} tweets from user timeline`;
       for (var i = 0; i < tweets.length; ++i) {
         if(process.env.TWTR_USER_ID == tweets[i].user.id_str) {
           last_tweet_id_str = tweets[i].id_str;
           username = tweets[i].user.screen_name;
-          console.log("User's latest tweet found");
+          fetch_log += "; User's latest tweet found";
           break;
         }
       }
+      console.log(fetch_log);
       callback( { id_str: last_tweet_id_str, screen_name: username } );
     } else {
       console.error('Error: GET statuses/user_timeline returned non-Array object');
@@ -151,7 +152,7 @@ function main(tw_client) {
           console.error('Error: GET statuses/mentions_timeline returned error');
           console.error(error);
         } else if (Array.isArray(mentions)) {
-          console.log(`Sending ${mentions.length} replies to mentions`);
+          if (mentions.length) { console.log(`Sending ${mentions.length} replies to mentions:`); }
           mentions.forEach((mention) => {
             console.log(mention);
             var sender = mention.user.screen_name;
@@ -159,13 +160,13 @@ function main(tw_client) {
             var content = mention.text;
             var parsed = parseTweet(content, client_info.screen_name);
             // Prevent infinite looping on generated self-replies
-            if (sender != client_info.screen_name) {
+            if (sender == client_info.screen_name) {
+              console.log('Caught self-reply:');
+              console.log(result);
+            } else {
               fork_interpreter(parsed.input, parsed.program, (result) => {
                 sendReply(tw_client, sender, tweet_id, result);
               });
-            } else {
-              console.log('Caught self-reply');
-              console.log(result);
             }
           });
         } else {
