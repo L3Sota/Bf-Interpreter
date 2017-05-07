@@ -194,7 +194,10 @@ if (process.env.TWTR_USER_ID
     access_token_secret: process.env.TWTR_ACCESS_T_SECRET
   });
 
-  setInterval(fetch_and_reply, 60*1000, client);
+  const SECOND_MS = 1000;
+  const MINUTE_MS = 60*SECOND_MS;
+
+  setInterval(fetch_and_reply, MINUTE_MS, client);
 
   http.createServer().listen(process.env.PORT || 8103);
 
