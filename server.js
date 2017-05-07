@@ -141,7 +141,7 @@ function sendReply(tw_client, destination, original_tweet_id, message) {
   });
 }
 
-function main(tw_client) {
+function fetch_and_reply(tw_client) {
   fetch_latest_tweet(tw_client, (client_info) => {
     if (client_info.id_str) {
       tw_client.get('statuses/mentions_timeline', {
@@ -194,7 +194,7 @@ if (process.env.TWTR_USER_ID
     access_token_secret: process.env.TWTR_ACCESS_T_SECRET
   });
 
-  setInterval(main, 60*1000, client);
+  setInterval(fetch_and_reply, 60*1000, client);
 
   http.createServer().listen(process.env.PORT || 8103);
 
