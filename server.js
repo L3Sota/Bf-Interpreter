@@ -181,6 +181,25 @@ function fetch_and_reply(tw_client) {
   });
 }
 
+function advertise(tw_client) {
+  const now = new Date();
+  const today = now.getTime();
+  const offset = now.getTimezoneOffset();
+  var message = `bf_interpreter is currently online! Send a #Brainfuck #program to @bf_interpreter; replies within 60 s. [${today}][${offset}]`;
+  message = html_entities.encode(message);
+  tw_client.post('statuses/update', {
+    status: message
+  }, (error, tweet, response) => {
+    if (error) {
+      console.error('Error: POST statuses/update failed');
+      console.error(error);
+      return;
+    }
+    console.log('Succesful tweet with id '+tweet.id_str);
+    console.log(tweet.text);
+  });
+}
+
 if (process.env.TWTR_USER_ID
   && process.env.TWTR_C_KEY
   && process.env.TWTR_C_SECRET
@@ -196,8 +215,11 @@ if (process.env.TWTR_USER_ID
 
   const SECOND_MS = 1000;
   const MINUTE_MS = 60*SECOND_MS;
+  const HOUR_MS = 60*MINUTE_MS;
+  const DAY_MS = 24*HOUR_MS;
 
   setInterval(fetch_and_reply, MINUTE_MS, client);
+  setInterval(advertise, DAY_MS, client);
 
   http.createServer().listen(process.env.PORT || 8103);
 
