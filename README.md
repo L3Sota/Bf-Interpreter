@@ -3,7 +3,7 @@
 
 # bf-interpreter
 
-A Twitter bot that interprets Brainfuck code. Twitter account is [@bf_interpreter](https://twitter.com/bf_interpreter). Hosted on [Heroku](https://bf-interpreter.herokuapp.com) (Nothing there though since it doesn't have a frontend). Dev's Twitter account is [@L3Sota](https://twitter.com/L3Sota)
+A Twitter bot that interprets Brainfuck code. Twitter account is [@bf_interpreter](https://twitter.com/bf_interpreter). Hosted on [Heroku](https://bf-interpreter.herokuapp.com) (Nothing there though since it doesn't have a frontend). Dev's Twitter account is [@L3Sota](https://twitter.com/L3Sota). Currently runs best locally with `heroku local`.
 
 
 ## Installation
@@ -24,7 +24,7 @@ You will need to set 5 environment variables related to Twitter:
 - `TWTR_ACCESS_T_KEY`
 - `TWTR_ACCESS_T_SECRET`
 
-These can be obtained from either your Twitter account details or from your app details in [Twitter Apps](https://apps.twitter.com). The account should be an account created solely for the bot. `_C_` stands for Consumer and `_ACCESS_T_` stands for Access Token. Your `TWTR_USER_ID` can also be found by taking the numbers in `TWTR_ACCESS_T_KEY` up to (but not including) the first hyphen. `export` these variables through a `.bashrc`, or put them in an environment file to be `export`ed when running the server. If you are using Heroku, placing the environment variables in `KEY=VALUE` format in a `.env` file in the base directory allows `heroku local` to automatically load these variables for you.
+These can be obtained from either your Twitter account details or from your app details in [Twitter Apps](https://apps.twitter.com). The account should be an account created solely for the bot. `_C_` stands for Consumer and `_ACCESS_T_` stands for Access Token. Your `TWTR_USER_ID` can also be found by taking the numbers in `TWTR_ACCESS_T_KEY` up to (but not including) the first hyphen. `export` these variables directly or through a `.bashrc`, or put them in an environment file to be `export`ed when running the server. If you are using Heroku, placing the environment variables in `KEY=VALUE` format in a `.env` file in the base directory allows `heroku local` to automatically load these variables for you.
 
 
 ## Running
