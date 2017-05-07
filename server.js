@@ -182,6 +182,9 @@ function fetch_and_reply(tw_client) {
 }
 
 function advertise(tw_client) {
+  // Get all replies out before tweeting
+  fetch_and_reply(tw_client);
+
   const now = new Date();
   const today = now.getTime();
   const offset = now.getTimezoneOffset();
