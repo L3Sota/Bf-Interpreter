@@ -162,7 +162,7 @@ function main(tw_client) {
             // Prevent infinite looping on generated self-replies
             if (sender == client_info.screen_name) {
               console.log('Caught self-reply:');
-              console.log(result);
+              console.log(content);
             } else {
               fork_interpreter(parsed.input, parsed.program, (result) => {
                 sendReply(tw_client, sender, tweet_id, result);
